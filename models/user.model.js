@@ -5,12 +5,17 @@ const AutoIncrement = require("mongoose-sequence")(mongoose);
 const userSchema = new mongoose.Schema({
   userId: Number,
   name: {
-    first: String,
-    last: String,
+    type: String,
+    required: true,
   },
   mobile: { type: String, minlength: 10, maxlength: 13 },
-  email: { type: String, unique: true },
-  password: { type: String, minlength: 5, maxlength: 10 },
+  email: { type: String, unique: true, required: true },
+  password: { type: String, minlength: 5, required: true },
+  admin: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   avatar: String,
   gender: String,
   age: Number,
@@ -18,4 +23,5 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.plugin(AutoIncrement, { inc_field: "userId" });
-module.exports = mongoose.model("User", userSchema);
+const UserModel = mongoose.model("User", userSchema);
+module.exports = UserModel;
