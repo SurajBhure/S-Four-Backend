@@ -109,12 +109,12 @@ class UserCtrl {
         const user = await UserModel.findOne({ email });
         // console.log("User from db", user.email);  // explain nantar
         if (user) {
-          if (compareHash(password, user.password)) {
+          if (await compareHash(password, user.password)) {
             const token = createToken({ id: user._id, name: user.name });
             if (user.admin) {
               return res.status(201).send({ token, admin: true });
             } else {
-              return res.status(400).send({ token, admin: false });
+              return res.status(201).send({ token, admin: false });
             }
           } else {
             return res
