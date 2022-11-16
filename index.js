@@ -1,15 +1,18 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-require("./db");
-const userRouter = require("./routes/user.route")
+const express = require('express')
+const bodyParser = require('body-parser')
+const cors = require('cors')
+require('./db')
+const userRouter = require('./routes/user.route')
+const authRouter = require('./routes/auth.route')
 
-const env = require("./config/envConfig");
+const env = require('./config/envConfig')
 // console.log(env);
-const PORT = env.PORT || 3007;
+const PORT = env.PORT || 3007
 
-const app = express(); 
+const app = express()
+app.use(cors())
 
-app.use(bodyParser.json());
+app.use(bodyParser.json())
 //or
 // app.use(express.json());
 
@@ -18,10 +21,10 @@ app.use(bodyParser.json());
 //   res.json({ message: "Welcome to learn react" });
 // });
 
-
 //use routes we use app.use
-app.use("/api", userRouter);
+app.use('/users', userRouter)
+app.use('/auth', authRouter)
 
 app.listen(PORT, () => {
-  console.log(`Server is listening on ${PORT}`);
-});
+  console.log(`Server is listening on ${PORT}`)
+})
