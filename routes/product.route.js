@@ -27,7 +27,7 @@ const {
 
 router.post(
   '/',
-  //for multiple images array used and 10 is used for maximum 10 images allowed
+  //for multiple images array used and 3 is used for maximum 3 images allowed
   upload.array('images', 3),
   createProduct,
 )
