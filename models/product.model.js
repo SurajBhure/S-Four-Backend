@@ -10,13 +10,11 @@ const productSchema = new mongoose.Schema({
   category: String,
   brand: String,
   price: Number,
-  quantity: Number,
-  rating: String,
+  rating: Number,
   status: Number,
   stock: Number,
   color: String,
   images: [],
-  features: [],
   orders: [
     {
       type: mongoose.SchemaTypes.ObjectId,
