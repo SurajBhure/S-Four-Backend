@@ -5,12 +5,7 @@ require('./db')
 const userRouter = require('./routes/user.route')
 const authRouter = require('./routes/auth.route')
 
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require('cors'
 const env = require('./config/envConfig')
-// console.log(env);
-require('./db')
 
 const app = express()
 
