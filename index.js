@@ -1,19 +1,25 @@
+
 const express = require("express");
 const bodyParser = require("body-parser");
-require("./db");
-const userRouter = require("./routes/user.route");
-const productRouter = require("./routes/product.route");
-// const orderRouter = require("./routes/order.route");
-
-const env = require("./config/envConfig");
+const cors = require('cors'
+const env = require('./config/envConfig')
 // console.log(env);
-const PORT = env.PORT || 3007;
+require("./db");
 
-const app = express();
+const app = express()
 
-app.use(bodyParser.json());
+const PORT = env.PORT || 3007
+app.use(bodyParser.json())
+app.use(cors())
+
 //or
 // app.use(express.json());
+
+const userRouter = require("./routes/user.route");
+const authRouter = require('./routes/auth.route')
+const productRouter = require("./routes/product.route");
+const orderRouter = require("./routes/order.route");
+
 
 //-----checking with response -----------//
 // app.get("/", (req, res) => {
@@ -21,7 +27,8 @@ app.use(bodyParser.json());
 // });
 
 //use routes we use app.use
-app.use("/api", userRouter);
+app.use('/users', userRouter)
+app.use('/auth', authRouter)
 
 //products api
 app.use("/api/product", productRouter);
@@ -30,5 +37,5 @@ app.use("/api/product", productRouter);
 // app.use("/api/oder", orderRouter);
 
 app.listen(PORT, () => {
-  console.log(`Server is listening on ${PORT}`);
-});
+  console.log(`Server is listening on ${PORT}`)
+})
