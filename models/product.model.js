@@ -10,9 +10,17 @@ const productSchema = new mongoose.Schema({
   },
   category: String,
   price: Number,
-  rating: String,
+  rating: Number,
+  status: Number,
+  stock: Number,
+  color: String,
   images: [],
-  features: [],
+  orders: [
+    {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Order",
+    },
+  ],
   createdAt: { type: Date, default: Date.now },
 });
 
