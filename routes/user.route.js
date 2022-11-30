@@ -19,16 +19,15 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 const {
-  // createUser,
-  updateUser,
+  createUser,
+  // updateUser,
   deleteUser,
   fetchOneUser,
   fetchAllUser,
-  createUser,
 } = require("../controllers/user.controller");
 
 router.post("/register", createUserValidations, createUser); // to register a user || createuser
-router.put("/:id", updateUser);
+// router.put("/:id", updateUser);
 router.delete("/:id", deleteUser);
 router.post("/login",loginValidations, fetchOneUser); // login user || fetchone user
 router.get("/", fetchAllUser);
