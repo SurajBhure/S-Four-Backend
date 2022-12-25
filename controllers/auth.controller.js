@@ -111,4 +111,5 @@ class authCtrl {
   } //refreshToken
 }
 
-module.exports = authCtrl
+module.exports = authCtrl;
+

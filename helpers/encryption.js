@@ -12,7 +12,7 @@ const compareHash = async (password,dbPassword)=>{
     try {
         return bcrypt.compareSync(password,dbPassword)
     } catch (error) {
-        console.error(error);
+        console.error("compareHash error :->",error);
     }
 }
 

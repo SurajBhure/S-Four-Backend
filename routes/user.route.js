@@ -22,39 +22,17 @@ const upload = multer({ storage: storage })
 
 const {
   createUser,
-  updateUser,
+
+  // updateUser,
   deleteUser,
   fetchOneUser,
   fetchAllUser,
-} = require('../controllers/user.controller')
-const authorize = require('../helpers/middlewares/authorize')
+} = require("../controllers/user.controller");
 
-router.post('/', upload.single('avatar'), validateUser, createUser) // to register a user || createuser
-
-router.put(
-  '/:id',
-  upload.single('avatar'),
-  // authorize(['superadmin', 'admin', 'customer']),
-  validateUser,
-  updateUser,
-)
-
-router.delete(
-  '/:id',
-  //  authorize(['superadmin', 'admin']),
-  deleteUser,
-)
-
-router.get(
-  '/:id',
-  //  authorize(['superadmin', 'admin', 'customer']),
-  fetchOneUser,
-) // login user || fetchone user
-
-router.get(
-  '/',
-  //  authorize(['superadmin', 'admin']),
-  fetchAllUser,
-)
+router.post("/register", createUserValidations, createUser); // to register a user || createuser
+// router.put("/:id", updateUser);
+router.delete("/:id", deleteUser);
+router.post("/login",loginValidations, fetchOneUser); // login user || fetchone user
+router.get("/", fetchAllUser);
 
 module.exports = router

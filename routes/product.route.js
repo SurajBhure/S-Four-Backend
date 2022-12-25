@@ -1,44 +1,25 @@
-const router = require('express').Router()
-const multer = require('multer')
-const path = require('path')
-const { validateProduct } = require('../validations/product.validation')
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/products')
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9)
-    cb(
-      null,
-      file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname),
-    )
-  },
-})
 
-const upload = multer({ storage: storage })
+const express = require("express");
+const router = express.Router();
+const { authorized } = require("../helpers/middlewares/Authorization");
+const productValidation = require("../validations/productValidation");
 
 const {
-  createProduct,
+  create,
+  getProducts,
+  fetchProduct,
   updateProduct,
   deleteProduct,
-  getSingleProduct,
-  getAllProduct,
-} = require('../controllers/product.controller')
+} = require("../controllers/product.controller");
+const { catProducts } = require("../controllers/HomeProd.controller");
 
-router.post(
-  '/',
-  //for multiple images array used and 3 is used for maximum 3 images allowed
-  upload.array('images', 3),
-  validateProduct,
-  createProduct,
-)
+router.post("/create-product", authorized, create);
+router.get("/products/:page", authorized, getProducts);
+router.get("/edit-product/:id", authorized, fetchProduct);
+router.get("/product/:id", fetchProduct); // public route for get product details
+router.put("/product", [authorized, productValidation], updateProduct);
+router.delete("/delete/:id", authorized, deleteProduct);
+router.get("/cat-products/:name/:page?", catProducts);
+router.get("/search-products/:keyword/:page?", catProducts);
 
-router.put('/:id', upload.array('images', 3), validateProduct, updateProduct)
-
-router.delete('/:id', deleteProduct)
-
-router.get('/:id', getSingleProduct)
-
-router.get('/', getAllProduct)
-
-module.exports = router
+module.exports = router;
