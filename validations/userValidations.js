@@ -1,11 +1,12 @@
-const { body } = require("express-validator");
+const { body } = require('express-validator')
 
 module.exports.createUserValidations = [
-  body("name")
+  body('name.first')
     .not()
     .isEmpty() // input filed should not empty
     .trim() //   "     suraj    "
     .escape() // "suraj,>@"
+
     .withMessage("Name is required"),
   //    @GMAIL.COM
   body("email").isEmail().normalizeEmail().withMessage("Email is required"),

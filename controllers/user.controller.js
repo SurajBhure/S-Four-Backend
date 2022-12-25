@@ -1,3 +1,4 @@
+
 const { encryption, compareHash } = require("../helpers/encryption");
 const UserModel = require("../models/user.model");
 const _ = require("lodash");
@@ -7,16 +8,20 @@ const { createToken } = require("../helpers/tokenServices");
 class UserCtrl {
   static pickUser(user) {
     return _.pick(user, [
-      "name",
-      "mobile",
-      "email",
-      "avatar",
-      "_id",
-      "createdAt",
-      "userId",
-      "admin",
-    ]);
+      '_id',
+      'userId',
+      'name',
+      'mobile',
+      'email',
+      'gender',
+      'age',
+      'role',
+      'avatar',
+      'createdAt',
+      'address',
+    ])
   }
+
 
   // POST /api/register
   // @access Public
@@ -83,32 +88,46 @@ class UserCtrl {
       return res.status(400).send({ errors: errors.array() });
     }
   } //createUser
+
+
   static updateUser(req, res) {
-    const { id } = req.params;
-    const user = req.body;
+    const { id } = req.params
+    const user = req.body
+
+    console.log('User: ', user)
+    // if req contains password then encrpt it
+    if (user.password) user.password = encryption(user.password)
+
+    if (req.file) user.avatar = req?.file?.filename
+    // console.log('User: ', user)
 
     UserModel.findOneAndUpdate({ _id: id }, user, { new: true })
       .then((result) => {
-        res.status(200).send({ message: "User updated", data: result });
+        res
+          .status(200)
+          .send({ message: 'User updated', data: UserCtrl.pickUser(result) })
       })
       .catch((err) => {
-        console.error(err);
+        console.error(err)
         // console.log("Error: ", err);
-        res.status(500).send({ message: "user not updated", error: err });
-      });
+        res.status(500).send({ message: 'user not updated', error: err })
+      })
   } //updateUser
-  static deleteUser(req, res) {
-    const { id } = req.params;
 
-    UserModel.findOneAndDelete({ _id: id }, { status: 2 })
+  static deleteUser(req, res) {
+    const { id } = req.params
+
+    UserModel.findOneAndDelete({ _id: id })
       .then((result) => {
-        res.status(200).send({ message: "User deleted", data: result });
+        res
+          .status(200)
+          .send({ message: 'User deleted', data: UserCtrl.pickUser(result) })
       })
       .catch((err) => {
-        console.error(err);
+        console.error(err)
         // console.log("Error: ", err);
-        res.status(500).send({ message: "user not deleted", error: err });
-      });
+        res.status(500).send({ message: 'user not deleted', error: err })
+      })
   } //deleteUser
 
   // POST /api/login
@@ -137,6 +156,7 @@ class UserCtrl {
     //           .send({
     //             errors: [{ msg: `Sorry wrong password!!!`, param: "password" }],
     //           });
+
     //       }
     //     } else {
     //       return res
@@ -191,18 +211,24 @@ class UserCtrl {
       //  validations failed
       return res.status(400).send({ errors: errors.array() });
     }
+
   } //fetchOneUser
+
   static fetchAllUser(req, res) {
-    UserModel.find()
+    const filter = { $or: [{ status: 0 }, { status: 1 }] }
+    UserModel.find(filter)
       .then((result) => {
-        res.status(200).send({ message: "Users List", data: result });
+        res.status(200).send({
+          message: 'Users List',
+          data: _.map(result, (user) => UserCtrl.pickUser(user)),
+        })
       })
       .catch((err) => {
-        console.error(err);
+        console.error(err)
         // console.log("Error: ", err);
-        res.status(404).send({ message: "users list not found", error: err });
-      });
+        res.status(404).send({ message: 'users not found', error: err })
+      })
   } //fetchAllUser
 }
 
-module.exports = UserCtrl;
+module.exports = UserCtrl
